@@ -1,6 +1,10 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import firebase from "firebase";
 
-  import firebase from "firebase";
+  
+//   import firebase from 'firebase/app';
+// import 'firebase/auth';
+// import 'firebase/firestore';
   const firebaseApp = firebase.initializeApp({ apiKey: "AIzaSyCR1D3ez7K_VACzmkE9lDrpZcrwpn7M8X0",
   authDomain: "instagram-clone-react-42877.firebaseapp.com",
   databaseURL: "https://instagram-clone-react-42877-default-rtdb.firebaseio.com",
