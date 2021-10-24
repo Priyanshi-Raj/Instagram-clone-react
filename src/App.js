@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button ,Input } from '@material-ui/core';
 import img2 from './Images/post.png';
+import ImageUpload from "./ImageUpload";
 function getModalStyle() {
   const top = 50;
   const left = 50;
@@ -32,6 +33,7 @@ function App() {
   const [modalStyle] = useState(getModalStyle);
   const [posts, setPosts] = useState([]);
   const [open, setOpen] = useState(false);
+  const [openSignIn , setOpenSignIn] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -73,12 +75,27 @@ return() =>{
   const signUp =(event) =>{
  event.preventDefault();
  auth.createUserWithEmailAndPassword(email , password)
+ .then((authUser)=>{
+   return authUser.user.updateProfile({
+     displayName: username
+   })
+ })
  .catch((error)=> alert(error.message));
   }
 
-
+const signIn = (event) =>{
+  event.preventDefault();
+auth.signInWithEmailAndPassword(email , password)
+.catch((error)=>alert(error.message))
+setOpenSignIn(false)}
   return (
     <div className="App">
+      {user?.displayName ? (<ImageUpload username= {user.displayName}/>):
+  (
+    <h3>Sorry you need to login</h3>
+  )}
+      {/* caption input-fie picker -post button */}
+      {/* <ImageUpload username={user.displayName}/> */}
       <Modal open={open} onClose={() => setOpen(false)}>
         <div style={modalStyle} className={classes.paper}>
           <form action="" className="app__signup"><center>
@@ -105,10 +122,41 @@ return() =>{
         </form>
         </div>
       </Modal>
+      <Modal open={openSignIn} onClose={() => setOpenSignIn(false)}>
+        <div style={modalStyle} className={classes.paper}>
+          <form action="" className="app__signup"><center>
+            <img src={img2} alt="" className="app_headerImage" /> </center>
+             <Input
+          type="text"
+          placeholder="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <Input
+          type="text"
+          placeholder="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          type="text"
+          placeholder="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button type="submit" onClick={signUp}> sign up </Button>
+        </form>
+        </div>
+      </Modal>
       <div className="app_header">
-        <img src="" alt="" className="app_headerImage" />
+        <img src={img1} alt="" className="app_headerImage" />
        
       </div>
+      {user ? (<Button onClick={()=> auth.signOut}>LogOut </Button>):(
+        <div className="app__loginContainer">
+          <Button onClick={()=> setOpen(true)}>SignIn </Button>
+        <Button onClick={()=> setOpen(true)}>SignUp </Button></div>
+      )}
       
       <h1>hiiiii</h1>
       {posts.map(({ id, post }) => {
